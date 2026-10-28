@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Kurai</title>
+<link rel="icon" type="image/png" href="TeamKurai.png">
+
+<!-- OG Meta Tags -->
+<meta property="og:title" content="Team Kurai — Rocket League Community">
+<meta property="og:description" content="Team Kurai is a competitive Rocket League team playing with passion and dedication. Join us or follow our journey.">
+<meta property="og:image" content="LogoKurai.png">
+<meta property="og:url" content="https://teamkurai.com">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Team Kurai — Rocket League Community">
+<meta name="twitter:description" content="Competitive Rocket League team. Join us or follow our journey.">
+<meta name="twitter:image" content="LogoKurai.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Root ── */
+.hero-content { text-align: center; }
+.hero-sub { text-align: center; margin: 0 auto; max-width: 600px; }
+:root {
+  --bg: #0c0c0e; --bg2: #111114; --border: rgba(255,255,255,0.07);
+  --text: #e8e8f0; --muted: rgba(232,232,240,0.45);
+  --accent: #7c3aed; --accent2: #a855f7; --white: #ffffff;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: linear-gradient(to bottom,#a855f7,#7c3aed,#4f46e5,#2563eb); border-radius:4px; }
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(to bottom,#c084fc,#a855f7,#7c3aed,#3b82f6); }
+html { scroll-behavior: smooth; }
+html, body { width: 100%; overflow-x: hidden; }
+body {
+  font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text);
+  font-size: 16px; line-height: 1.6; position: relative;
+}
+
+/* ── Noise Texture ── */
+body::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.028; mix-blend-mode: overlay;
+}
+
+/* ── Loading Screen ── */
+#loader {
+  position: fixed; inset: 0; z-index: 10000;
+  background: var(--bg); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1.5rem;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#loader.hidden { opacity: 0; visibility: hidden; }
+.loader-logo {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+  font-size: 4rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--white); animation: loaderPulse 1.2s ease-in-out infinite;
+}
+.loader-bar-wrap { width: 160px; height: 2px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.loader-bar { height: 100%; width: 0%; background: linear-gradient(to right,var(--accent),var(--accent2)); border-radius: 2px; transition: width 0.05s linear; }
+.loader-text { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); }
+@keyframes loaderPulse {
+  0%,100% { text-shadow: 0 0 20px rgba(168,85,247,0.3); }
+  50%      { text-shadow: 0 0 60px rgba(168,85,247,0.9); }
+}
+
+/* ── Cursor Glow ── */
+.cursor-glow {
+  position: fixed; width: 250px; height: 250px; border-radius: 50%;
+  pointer-events: none; z-index: 1;
+  background: radial-gradient(circle, rgba(168,85,247,0.35) 0%, rgba(168,85,247,0.18) 45%, transparent 75%);
+  transform: translate(-50%, -50%); filter: blur(22px);
+}
+
+/* ── Toast ── */
+.toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 5000; display: flex; flex-direction: column; gap: 0.75rem; pointer-events: none; }
+.toast {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.85rem 1.4rem; border-radius: 6px;
+  display: flex; align-items: center; gap: 0.75rem;
+  transform: translateX(120%); transition: transform 0.4s cubic-bezier(.22,1,.36,1);
+  pointer-events: all; cursor: pointer; max-width: 320px;
+}
+.toast.show { transform: translateX(0); }
+.toast.success { background: rgba(10,10,12,0.95); border: 1px solid rgba(34,197,94,0.4); color: #4ade80; backdrop-filter: blur(12px); }
+.toast.error   { background: rgba(10,10,12,0.95); border: 1px solid rgba(239,68,68,0.4);  color: #f87171; backdrop-filter: blur(12px); }
+.toast.info    { background: rgba(10,10,12,0.95); border: 1px solid rgba(168,85,247,0.4);  color: var(--accent2); backdrop-filter: blur(12px); }
+.toast-icon { font-size: 1.1rem; }
+
+/* ── Nav ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 3rem; height: 70px;
+  background: transparent; backdrop-filter: none; border-bottom: 1px solid transparent;
+  transition: background 0.4s, backdrop-filter 0.4s, border-color 0.4s;
+}
+nav.nav-scrolled { background: rgba(12,12,14,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+.nav-center { position: absolute; left: 50%; transform: translateX(-50%); }
+.nav-right { display: flex; align-items: center; gap: 0.5rem; }
+.nav-rl {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; font-weight:700;
+  letter-spacing:0.12em; text-transform:uppercase; color:var(--muted);
+  text-decoration:none; padding:0.4rem 0.8rem; border-radius:4px;
+  transition:color 0.2s; position:relative;
+}
+.nav-rl::after { content:''; position:absolute; bottom:-2px; left:50%; right:50%; height:2px; background:var(--accent2); transition:left 0.25s, right 0.25s; }
+.nav-rl:hover { color:var(--white); }
+.nav-rl:hover::after { left:0.8rem; right:0.8rem; }
+.nav-rl-arrow { display:inline-block; margin-right:0.4rem; font-size:1.1rem; animation:arrowSlide 1.4s ease-in-out infinite; color:var(--accent2); }
+@keyframes arrowSlide { 0%{transform:translateX(-4px);opacity:0.3} 50%{transform:translateX(3px);opacity:1} 100%{transform:translateX(-4px);opacity:0.3} }
+.nav-logo { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
+.nav-logo img { width:32px; height:32px; object-fit:contain; animation:floatLogo 3s ease-in-out infinite; }
+.nav-logo span { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1.1rem; letter-spacing:0.15em; color:var(--white); text-transform:uppercase; }
+.nav-links { display:flex; gap:0.5rem; align-items:center; }
+.nav-links a {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; font-weight:700;
+  letter-spacing:0.12em; text-transform:uppercase; color:var(--muted);
+  text-decoration:none; padding:0.4rem 0.8rem; border-radius:4px;
+  transition:color 0.2s; position:relative;
+}
+.nav-links a::after { content:''; position:absolute; bottom:-2px; left:50%; right:50%; height:2px; background:var(--accent2); transition:left 0.25s, right 0.25s; }
+.nav-links a:hover, .nav-links a.nav-active { color:var(--white); }
+.nav-links a.nav-active::after, .nav-links a:hover::after { left:0.8rem; right:0.8rem; }
+.nav-discord {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; font-weight:700;
+  letter-spacing:0.1em; text-transform:uppercase; color:var(--white);
+  text-decoration:none; padding:0.5rem 1.2rem; border:1px solid var(--accent);
+  border-radius:4px; margin-left:1rem; transition:background 0.2s, box-shadow 0.2s;
+}
+.nav-discord:hover { background:var(--accent); box-shadow:0 0 20px rgba(124,58,237,0.4); }
+
+/* ── Hamburger ── */
+.nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:0.5rem; z-index:110; background:none; border:none; }
+.nav-hamburger span { display:block; width:24px; height:2px; background:var(--white); transition:transform 0.3s, opacity 0.3s; }
+.nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity:0; }
+.nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+.mobile-menu { display:none; position:fixed; inset:0; z-index:99; background:rgba(12,12,14,0.97); backdrop-filter:blur(20px); flex-direction:column; align-items:center; justify-content:center; gap:2rem; }
+.mobile-menu.open { display:flex; }
+.mobile-menu a { font-family:'Barlow Condensed',sans-serif; font-size:2rem; font-weight:900; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s; }
+.mobile-menu a:hover { color:var(--white); }
+.mobile-menu .mobile-discord { font-size:1rem; padding:0.85rem 2.5rem; border:1px solid var(--accent); border-radius:4px; color:var(--white); margin-top:1rem; }
+.mobile-menu .mobile-discord:hover { background:var(--accent); }
+
+/* ── Hero ── */
+.hero {
+  position:relative; min-height:100vh; width:100vw; max-width:100vw;
+  margin-left:calc(-50vw + 50%);
+  display:flex; align-items:center; justify-content:center;
+  text-align:center; overflow:hidden;
+}
+#particles-canvas { position:absolute; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none; }
+.hero-video { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+.hero-overlay { position:absolute; inset:0; z-index:2; background:linear-gradient(to bottom,rgba(12,12,14,0.45) 0%,rgba(12,12,14,0.55) 50%,rgba(12,12,14,1) 100%); }
+.hero-content { position:relative; z-index:3; padding:2rem; display:flex; flex-direction:column; align-items:center; gap:1.5rem; }
+.hero-eyebrow {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; font-weight:700;
+  letter-spacing:0.25em; text-transform:uppercase; color:#fff;
+  display:flex; align-items:center; gap:0.75rem;
+  text-shadow:0 0 20px rgba(168,85,247,0.8),0 2px 8px rgba(0,0,0,0.9);
+}
+.hero-eyebrow::before,.hero-eyebrow::after { content:''; width:30px; height:1px; background:#fff; }
+.hero-title {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:clamp(5rem,15vw,12rem); line-height:0.9;
+  letter-spacing:-0.02em; text-transform:uppercase; color:var(--white);
+  text-shadow:0 0 60px rgba(168,85,247,0.5),0 4px 30px rgba(0,0,0,1),0 2px 4px rgba(0,0,0,1);
+  -webkit-text-stroke:1px rgba(255,255,255,0.15);
+  position:relative;
+}
+.hero-sub { font-size:1.05rem; color:#fff; max-width:540px; font-weight:400; line-height:1.7; text-shadow:0 2px 12px rgba(0,0,0,1),0 1px 4px rgba(0,0,0,0.9); }
+.hero-sub strong { color:var(--white); font-weight:600; }
+.hero-cta { display:flex; gap:1rem; margin-top:0.5rem; }
+
+/* Countdown */
+.hero-countdown {
+  display:flex; gap:1.5rem; align-items:center;
+  padding:1rem 2rem; border:1px solid rgba(168,85,247,0.25);
+  border-radius:6px; background:rgba(12,12,14,0.6); backdrop-filter:blur(8px);
+  margin-top:0.5rem;
+}
+.countdown-label-top { font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.25rem; text-align:center; }
+.countdown-unit { display:flex; flex-direction:column; align-items:center; }
+.countdown-num { font-family:'Barlow Condensed',sans-serif; font-size:2rem; font-weight:900; color:var(--white); line-height:1; min-width:2.5rem; text-align:center; }
+.countdown-unit-label { font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); margin-top:0.2rem; }
+.countdown-sep { font-family:'Barlow Condensed',sans-serif; font-size:1.5rem; font-weight:900; color:var(--accent); line-height:1; margin-bottom:0.5rem; }
+
+.btn-primary { font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--white); text-decoration:none; padding:0.85rem 2rem; background:var(--accent); border:1px solid var(--accent); border-radius:4px; transition:background 0.2s,box-shadow 0.2s; cursor:pointer; }
+.btn-primary:hover { background:var(--accent2); border-color:var(--accent2); box-shadow:0 0 30px rgba(124,58,237,0.5); }
+.btn-secondary { font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--text); text-decoration:none; padding:0.85rem 2rem; border:1px solid var(--border); border-radius:4px; transition:border-color 0.2s,color 0.2s; cursor:pointer; background:transparent; }
+.btn-secondary:hover { border-color:rgba(255,255,255,0.25); color:var(--white); }
+
+/* ── Sections ── */
+section { padding:7rem 3rem; max-width:1100px; margin:0 auto; }
+.section-label { display:flex; align-items:center; gap:0.75rem; font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:1.5rem; }
+.section-label::before { content:''; width:24px; height:2px; background:var(--accent2); }
+.section-title { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:clamp(3rem,6vw,5rem); line-height:0.95; text-transform:uppercase; color:var(--white); margin-bottom:1.5rem; }
+.section-divider { width:100%; height:1px; background:var(--border); margin:0; }
+
+/* ── About ── */
+#about .about-body { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
+#about p { color:var(--muted); font-size:1rem; line-height:1.8; font-weight:300; }
+#about p + p { margin-top:1rem; }
+#about .about-stats { display:flex; flex-direction:column; gap:2rem; }
+.stat { border-top:1px solid var(--border); padding-top:1.5rem; }
+.stat-num { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:3rem; color:var(--accent2); line-height:1; }
+.stat-label { font-size:0.85rem; color:var(--muted); margin-top:0.3rem; text-transform:uppercase; letter-spacing:0.08em; font-family:'Barlow Condensed',sans-serif; font-weight:700; }
+
+/* ── Roster ── */
+.roster-filters { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+.roster-filter-btn {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700;
+  letter-spacing:0.15em; text-transform:uppercase;
+  padding:0.4rem 1rem; border-radius:4px; cursor:pointer;
+  border:1px solid var(--border); background:transparent; color:var(--muted);
+  transition:border-color 0.2s, color 0.2s, background 0.2s;
+}
+.roster-filter-btn:hover { color:var(--white); border-color:rgba(255,255,255,0.2); }
+.roster-filter-btn.active { background:rgba(124,58,237,0.15); border-color:var(--accent); color:var(--accent2); }
+.roster-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1.25rem; }
+.roster-card {
+  background:var(--bg2); border:1px solid var(--border); border-radius:8px;
+  padding:1.75rem 1.5rem; display:flex; flex-direction:column; align-items:center;
+  gap:0.75rem; text-align:center;
+  transition:border-color 0.25s,background 0.25s,transform 0.25s,opacity 0.3s;
+  position:relative; overflow:hidden;
+}
+.roster-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(to right,var(--accent),var(--accent2)); transform:scaleX(0); transition:transform 0.3s cubic-bezier(.22,1,.36,1); }
+.roster-card:hover { border-color:rgba(124,58,237,0.4); background:rgba(124,58,237,0.05); transform:translateY(-4px); }
+.roster-card:hover::before { transform:scaleX(1); }
+.roster-card.hidden { display:none; }
+.roster-avatar { width:72px; height:72px; border-radius:50%; border:2px solid var(--border); background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(168,85,247,0.15)); display:flex; align-items:center; justify-content:center; font-size:2rem; overflow:hidden; transition:border-color 0.25s; }
+.roster-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+.roster-card:hover .roster-avatar { border-color:var(--accent2); }
+.roster-tag { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1.1rem; letter-spacing:0.1em; color:var(--white); }
+.roster-role-badge { font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; padding:0.2rem 0.7rem; border-radius:2px; background:rgba(124,58,237,0.2); border:1px solid rgba(124,58,237,0.4); color:var(--accent2); }
+.roster-rank { font-size:0.8rem; color:var(--muted); font-weight:300; }
+.roster-captain .roster-avatar { border-color:var(--accent2); box-shadow:0 0 20px rgba(168,85,247,0.3); }
+.roster-captain .roster-role-badge { background:rgba(168,85,247,0.25); border-color:var(--accent2); color:#fff; }
+.roster-section-break { grid-column: 1 / -1; display:flex; align-items:center; gap:1rem; margin-top:2rem; }
+.roster-section-label { font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.25em; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+.roster-section-break::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ── Roles ── */
+.roles-card { border:1px solid var(--border); border-radius:8px; padding:2rem; background:var(--bg2); overflow:hidden; }
+.roles-grid { display:grid; grid-template-columns:repeat(2,1fr); grid-template-areas:"r1 r2" "r3 r3" "r4 r5"; gap:1rem; margin-bottom:0; }
+.role { background:var(--bg2); padding:2rem; cursor:pointer; display:flex; flex-direction:column; gap:0.5rem; transition:background 0.2s; position:relative; border:1px solid rgba(255,255,255,0.12); border-radius:6px; text-decoration:none; color:inherit; }
+.role::after { content:'→'; position:absolute; top:1.5rem; right:1.5rem; color:var(--muted); font-size:0.9rem; transition:color 0.2s,transform 0.2s; }
+.role:hover { background:rgba(124,58,237,0.08); }
+.role:hover::after { color:var(--accent2); transform:translate(3px,-3px); }
+.role-icon { font-size:1.5rem; margin-bottom:0.3rem; }
+.role h3 { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1.1rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); }
+.role small { font-size:0.8rem; color:var(--muted); font-weight:300; }
+.r1{grid-area:r1;} .r2{grid-area:r2;} .r3{grid-area:r3;width:50%;justify-self:center;} .r4{grid-area:r4;} .r5{grid-area:r5;}
+
+/* ── Join ── */
+.join-card { border:1px solid var(--border); border-radius:8px; padding:3rem; background:var(--bg2); }
+.join-layout { display:grid; grid-template-columns:1fr 1.4fr; gap:4rem; align-items:start; }
+.join-left h3 { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:2.5rem; text-transform:uppercase; color:var(--white); line-height:1.1; margin-bottom:1rem; }
+.join-left h3 span { color:var(--accent2); }
+.join-left p { color:var(--muted); font-size:0.95rem; line-height:1.7; font-weight:300; }
+.join-requirements { margin-top:2rem; display:flex; flex-direction:column; gap:0.75rem; }
+.join-req-item { display:flex; align-items:flex-start; gap:1rem; padding:1rem 1.2rem; border:1px solid var(--border); border-left:2px solid var(--accent); border-radius:4px; background:rgba(124,58,237,0.04); transition:background 0.2s,border-color 0.2s; }
+.join-req-item:hover { background:rgba(124,58,237,0.09); border-left-color:var(--accent2); }
+.join-req-icon { color:var(--accent2); font-size:0.75rem; margin-top:0.15rem; flex-shrink:0; }
+.join-req-text { display:flex; flex-direction:column; gap:0.2rem; }
+.join-req-title { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.85rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); }
+.join-req-desc { font-size:0.8rem; color:var(--muted); font-weight:300; line-height:1.5; }
+.join-form { display:flex; flex-direction:column; gap:1rem; }
+.form-group { display:flex; flex-direction:column; gap:0.4rem; }
+.form-label { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); }
+.join-form input,.join-form select,.join-form textarea { padding:0.85rem 1rem; border-radius:4px; border:1px solid var(--border); background:var(--bg2); color:var(--text); outline:none; font-family:'Barlow',sans-serif; font-size:0.9rem; transition:border-color 0.2s; appearance:none; }
+.join-form input:focus,.join-form select:focus,.join-form textarea:focus { border-color:var(--accent); }
+.join-form input::placeholder,.join-form textarea::placeholder { color:rgba(232,232,240,0.25); }
+.join-form select option { background:#1a1a1f; }
+.join-form button { padding:1rem; border:none; border-radius:4px; background:var(--accent); color:#fff; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.85rem; letter-spacing:0.15em; text-transform:uppercase; cursor:pointer; transition:background 0.2s,box-shadow 0.2s; margin-top:0.5rem; }
+.join-form button:hover { background:var(--accent2); box-shadow:0 0 30px rgba(124,58,237,0.4); }
+.join-form button:disabled { opacity:0.6; cursor:not-allowed; }
+
+/* ── Follow Banner ── */
+.follow-banner { position:relative; overflow:hidden; background:var(--bg2); border:1px solid var(--border); border-radius:8px; }
+.follow-banner-bg-text { position:absolute; left:50%; top:44%; transform:translate(-50%,-50%); font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:clamp(6rem,14vw,11rem); text-transform:uppercase; letter-spacing:-0.03em; color:transparent; -webkit-text-stroke:1px rgba(255,255,255,0.06); line-height:1; user-select:none; pointer-events:none; white-space:nowrap; z-index:0; }
+.follow-banner-header { position:relative; z-index:1; padding:3rem 3rem 2rem; border-bottom:1px solid var(--border); display:flex; align-items:flex-end; justify-content:space-between; min-height:160px; }
+.follow-banner-label { position:relative; z-index:1; }
+.follow-banner-label .section-label { margin-bottom:0.5rem; }
+.follow-banner-label h2 { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:clamp(2.5rem,5vw,4rem); text-transform:uppercase; color:var(--white); line-height:1; }
+.follow-cards-row { display:grid; grid-template-columns:repeat(4,1fr); gap:0; position:relative; z-index:1; }
+.follow-card-new { text-decoration:none; color:var(--text); display:flex; align-items:center; gap:1rem; padding:1.8rem 2rem; border-right:1px solid var(--border); transition:background 0.25s; position:relative; overflow:hidden; }
+.follow-card-new:last-child { border-right:none; }
+.follow-card-new::before { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:linear-gradient(to right,var(--accent),var(--accent2)); transform:scaleX(0); transition:transform 0.3s cubic-bezier(.22,1,.36,1); }
+.follow-card-new:hover { background:rgba(124,58,237,0.07); }
+.follow-card-new:hover::before { transform:scaleX(1); }
+.follow-card-new img { width:36px; height:36px; object-fit:contain; flex-shrink:0; filter:brightness(0) invert(1); opacity:0.7; transition:opacity 0.2s,transform 0.2s; }
+.follow-card-new:hover img { opacity:1; transform:scale(1.1); }
+.follow-card-info { display:flex; flex-direction:column; gap:0.2rem; }
+.follow-card-info h3 { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.95rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white); line-height:1; }
+.follow-card-info span { font-size:0.75rem; color:var(--muted); font-weight:300; }
+.follow-card-arrow { margin-left:auto; color:var(--muted); font-size:0.85rem; transition:color 0.2s,transform 0.2s; }
+.follow-card-new:hover .follow-card-arrow { color:var(--accent2); transform:translate(3px,-3px); }
+
+/* ── Footer ── */
+footer { border-top:1px solid var(--border); padding:2rem 3rem; display:flex; align-items:center; justify-content:space-between; }
+footer p { font-size:0.8rem; color:var(--muted); }
+footer .footer-right { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
+
+/* ── Animations ── */
+@keyframes floatLogo { 0%{transform:translateY(0)} 50%{transform:translateY(-6px)} 100%{transform:translateY(0)} }
+.fade-in { opacity:0; transform:translateY(80px) scale(0.95); filter:blur(12px); transition:opacity 1s cubic-bezier(.22,1,.36,1),transform 1s cubic-bezier(.22,1,.36,1),filter 1s cubic-bezier(.22,1,.36,1); }
+.fade-in.visible { opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  nav{padding:0 1.5rem;}
+  .nav-links.nav-center,.nav-right{display:none;}
+  .nav-hamburger{display:flex;}
+  section{padding:5rem 1.5rem;}
+  #about .about-body{grid-template-columns:1fr;gap:2.5rem;}
+  .roles-grid{grid-template-columns:1fr;grid-template-areas:"r1""r2""r3""r4""r5";}
+  .r3{width:100%;}
+  .join-layout{grid-template-columns:1fr;gap:2.5rem;}
+  .follow-cards-row{grid-template-columns:1fr 1fr;}
+  footer{flex-direction:column;gap:0.5rem;text-align:center;}
+  .follow-banner-header{padding:2rem 1.5rem 1.5rem;}
+  .roster-grid{grid-template-columns:repeat(2,1fr);}
+  .hero-countdown{gap:1rem;padding:0.75rem 1.25rem;}
+  .countdown-num{font-size:1.5rem;}
+}
+@media(max-width:480px){
+  .follow-cards-row{grid-template-columns:1fr;}
+  .follow-card-new{border-right:none;border-bottom:1px solid var(--border);}
+  .follow-card-new:last-child{border-bottom:none;}
+  .roster-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Background Particles ── -->
+<canvas id="bg-particles" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+
+<!-- ── Loading Screen ── -->
+<div id="loader">
+  <div class="loader-logo">KURAI</div>
+  <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
+  <div class="loader-text" id="loaderText">Loading...</div>
+</div>
+
+<!-- ── Toast Container ── -->
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" class="mobile-nav-link">About</a>
+  <a href="#roster-section" class="mobile-nav-link">Roster</a>
+  <a href="#roles-section" class="mobile-nav-link">Roles</a>
+  <a href="#join" class="mobile-nav-link">Apply</a>
+  <a href="#contacts" class="mobile-nav-link">Social</a>
+  <a href="https://discord.gg/4NbBg5Dfkc" target="_blank" class="mobile-discord mobile-nav-link">Discord →</a>
+</div>
+
+<nav>
+  <a href="#hero" class="nav-logo">
+    <img src="KURAI_PNG.png" alt="Kurai">
+    <span>Kurai</span>
+  </a>
+  <div class="nav-links nav-center">
+    <a href="#about" data-section="about">About</a>
+    <a href="#roster-section" data-section="roster-section">Roster</a>
+    <a href="#roles-section" data-section="roles-section">Roles</a>
+    <a href="#join" data-section="join">Apply</a>
+    <a href="#contacts" data-section="contacts">Social</a>
+  </div>
+  <div class="nav-right">
+    <a href="https://www.rocketleague.com/it/" target="_blank" class="nav-rl"><span class="nav-rl-arrow">→</span>Rocket League - Official Site</a>
+    <a href="https://discord.gg/4NbBg5Dfkc" target="_blank" class="nav-discord">Discord →</a>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero" class="hero">
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="Tr1xy.mp4" type="video/mp4">
+  </video>
+  <canvas id="particles-canvas"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow" id="heroEyebrow"></div>
+    <h1 class="hero-title" id="heroTitle">KURAI</h1>
+    <p class="hero-sub">
+      Welcome to the official website of <strong>Team Kurai</strong> —
+      a competitive Rocket League team playing with passion and dedication.
+    </p>
+
+    <div class="hero-countdown" id="heroCountdown">
+      <div style="text-align:center;">
+        <div class="countdown-label-top">Next Event</div>
+        <div style="display:flex;gap:1rem;align-items:center;">
+          <div class="countdown-unit"><span class="countdown-num" id="cd-days">00</span><span class="countdown-unit-label">Days</span></div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-unit"><span class="countdown-num" id="cd-hours">00</span><span class="countdown-unit-label">Hours</span></div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-unit"><span class="countdown-num" id="cd-mins">00</span><span class="countdown-unit-label">Min</span></div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-unit"><span class="countdown-num" id="cd-secs">00</span><span class="countdown-unit-label">Sec</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-cta" style="justify-content:center;">
+      <a href="#join" class="btn-primary">JOIN US →</a>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- 01 ABOUT -->
+<section id="about">
+  <div class="section-label">01 — About</div>
+  <h2 class="section-title fade-in">Who We Are</h2>
+  <div class="about-body fade-in">
+    <div>
+      <p><strong style="color:var(--text)">Kurai</strong> is a team founded in October 2024 with a clear and ambitious vision: to grow steadily over time, build a strong identity, and earn recognition on a global scale. Our ultimate goal is to compete at the highest level in Rocket League, reaching the most prestigious tournaments and proving our value among the best teams in the scene.</p>
+      <p>Beyond competitive success, Kurai is committed to building a strong and recognizable brand. We strive to increase our popularity while maintaining authenticity, creating a community where players and supporters feel genuinely connected. Every member of the team is supported both individually and collectively, ensuring they have the resources, motivation, and environment needed to achieve their personal and competitive goals.</p>
+      <p>We believe that communication is key to growth. That's why we actively encourage questions, feedback, and interaction from our community. By staying open and engaged with our supporters, we aim to create a loyal and passionate fanbase that grows alongside us. Kurai is not just a team—it's a project built on ambition, dedication, and connection.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat"><div class="stat-num" data-target="2024" data-type="year">2024</div><div class="stat-label">Founded</div></div>
+      <div class="stat"><div class="stat-num" data-target="5" data-type="count">0</div><div class="stat-label">Available Roles</div></div>
+      <div class="stat"><div class="stat-num" data-target="4" data-type="count">0</div><div class="stat-label">Social Platforms</div></div>
+      <div class="stat"><div class="stat-num" data-target="1" data-type="count">0</div><div class="stat-label">Community Discord</div></div>
+    </div>
+  </div>
+</section>
+<div class="section-divider"></div>
+
+<!-- 02 ROSTER -->
+<section id="roster-section">
+  <div class="section-label">02 — Roster</div>
+  <h2 class="section-title fade-in">OUR TEAM LEADS</h2>
+  <p style="color:var(--muted);margin-bottom:1.5rem;font-weight:300;">Here you will find some members of our team.</p>
+
+  <div class="roster-filters">
+    <button class="roster-filter-btn active" data-filter="all">All</button>
+    <button class="roster-filter-btn" data-filter="Captain">Owners</button>
+    <button class="roster-filter-btn" data-filter="Competitive">Competitive</button>
+    <button class="roster-filter-btn" data-filter="Freestyler">Freestyler</button>
+    <button class="roster-filter-btn" data-filter="Content Creator">Content</button>
+    <button class="roster-filter-btn" data-filter="No-Flipper">No-Flipper</button>
+    <button class="roster-filter-btn" data-filter="CCH">CCH</button>
+    <button class="roster-filter-btn" data-filter="VFX">VFX</button>
+    <button class="roster-filter-btn" data-filter="GFX">GFX</button>
+  </div>
+
+  <div class="roster-grid fade-in">
+
+    <!-- STAFF / OWNERS -->
+    <div class="roster-card roster-captain" data-role="Captain">
+      <div class="roster-avatar"><img src="Ryu.png" alt="Ryuhika" onerror="this.parentNode.innerHTML='👑'"></div>
+      <div class="roster-tag">Ryuhika</div>
+      <div class="roster-role-badge">Owner</div>
+    </div>
+    <div class="roster-card roster-captain" data-role="Captain">
+      <div class="roster-avatar"><img src="Metal.png" alt="Metal" onerror="this.parentNode.innerHTML='👑'"></div>
+      <div class="roster-tag">Metal</div>
+      <div class="roster-role-badge">Owner</div>
+    </div>
+    <div class="roster-card roster-captain" data-role="Captain">
+      <div class="roster-avatar"><img src="Freezie.png" alt="Freezie" onerror="this.parentNode.innerHTML='⚜️'"></div>
+      <div class="roster-tag">Freezie</div>
+      <div class="roster-role-badge">Co-Owner</div>
+    </div>
+
+    <!-- FREESTYLERS -->
+    <div class="roster-card" data-role="Freestyler">
+      <div class="roster-avatar"><img src="JAKZ.png" alt="Jakz" onerror="this.parentNode.innerHTML='⚡'"></div>
+      <div class="roster-tag">Jakz</div>
+      <div class="roster-role-badge">Freestyler Lead</div>
+    </div>
+    <div class="roster-card" data-role="Freestyler">
+      <div class="roster-avatar"><img src="jynx.png" alt="Jynx" onerror="this.parentNode.innerHTML='⚡'"></div>
+      <div class="roster-tag">Jynx</div>
+      <div class="roster-role-badge">Freestyler Lead</div>
+    </div>
+
+    <!-- CONTENT CREATORS -->
+    <div class="roster-card" data-role="Content Creator">
+      <div class="roster-avatar"><img src="Renji.png" alt="Renji" onerror="this.parentNode.innerHTML='🎬'"></div>
+      <div class="roster-tag">Renji</div>
+      <div class="roster-role-badge">Content Creator Lead</div>
+    </div>
+    <div class="roster-card" data-role="Content Creator">
+      <div class="roster-avatar"><img src="perplex.png" alt="Perplex" onerror="this.parentNode.innerHTML='🎬'"></div>
+      <div class="roster-tag">Perplex</div>
+      <div class="roster-role-badge">Content Creator Lead</div>
+    </div>
+
+    <!-- COMPETITIVE -->
+    <div class="roster-card" data-role="Competitive">
+      <div class="roster-avatar"><img src="K4mz.png" alt="K4mz" onerror="this.parentNode.innerHTML='🏆'"></div>
+      <div class="roster-tag">K4mz</div>
+      <div class="roster-role-badge">Competitive Lead</div>
+    </div>
+
+    <!-- NO-FLIPPER -->
+    <div class="roster-card" data-role="No-Flipper">
+      <div class="roster-avatar"><img src="coil.jpg" alt="Coil" onerror="this.parentNode.innerHTML='🧊'"></div>
+      <div class="roster-tag">Coil</div>
+      <div class="roster-role-badge">No-Flipper Lead</div>
+    </div>
+    <div class="roster-card" data-role="No-Flipper">
+      <div class="roster-avatar"><img src="heike.png" alt="Heikikette" onerror="this.parentNode.innerHTML='🧊'"></div>
+      <div class="roster-tag">Heikikette</div>
+      <div class="roster-role-badge">No-Flipper Lead</div>
+    </div>
+
+    <!-- CCH -->
+    <div class="roster-card" data-role="CCH">
+      <div class="roster-avatar"><img src="cbaz.png" alt="Cbaz" onerror="this.parentNode.innerHTML='🎥'"></div>
+      <div class="roster-tag">Cbaz</div>
+      <div class="roster-role-badge">CCH Lead</div>
+    </div>
+    <div class="roster-card" data-role="CCH">
+      <div class="roster-avatar"><img src="mossa.png" alt="Mossa" onerror="this.parentNode.innerHTML='🎥'"></div>
+      <div class="roster-tag">Mossa</div>
+      <div class="roster-role-badge">CCH Lead</div>
+    </div>
+
+    <!-- VFX -->
+    <div class="roster-card" data-role="VFX">
+      <div class="roster-avatar"><img src="tr1xy.png" alt="Tr1xy" onerror="this.parentNode.innerHTML='✨'"></div>
+      <div class="roster-tag">Tr1xy</div>
+      <div class="roster-role-badge">VFX Lead</div>
+    </div>
+    <div class="roster-card" data-role="VFX">
+      <div class="roster-avatar"><img src="Tei.png" alt="Tei" onerror="this.parentNode.innerHTML='✨'"></div>
+      <div class="roster-tag">Tei</div>
+      <div class="roster-role-badge">VFX Lead</div>
+    </div>
+
+    <!-- GFX -->
+    <div class="roster-card" data-role="GFX">
+      <div class="roster-avatar"><img src="Arwi.jpg" alt="Arwik" onerror="this.parentNode.innerHTML='🎨'"></div>
+      <div class="roster-tag">Arwik</div>
+      <div class="roster-role-badge">GFX Lead</div>
+    </div>
+
+    <!-- WEB DEVELOPER DIVIDER -->
+    <div class="roster-section-break">
+      <span class="roster-section-label">Web Developer</span>
+    </div>
+
+    <div class="roster-card" data-role="Web Developer">
+      <div class="roster-avatar"><img src="Eli.png" alt="Eli" onerror="this.parentNode.innerHTML='💻'"></div>
+      <div class="roster-tag">Eli</div>
+      <div class="roster-role-badge">Web Developer</div>
+    </div>
+    <div class="roster-card" data-role="Web Developer">
+      <div class="roster-avatar"><img src="Samu.png" alt="Samu" onerror="this.parentNode.innerHTML='💻'"></div>
+      <div class="roster-tag">Samu</div>
+      <div class="roster-role-badge">Web Developer</div>
+    </div>
+    <div class="roster-card" data-role="Web Developer">
+      <div class="roster-avatar"><img src="Nunx.png" alt="Nunx" onerror="this.parentNode.innerHTML='💻'"></div>
+      <div class="roster-tag">Nunx</div>
+      <div class="roster-role-badge">Web Developer</div>
+    </div>
+
+  </div>
+</section>
+<div class="section-divider"></div>
+
+<!-- 03 ROLES -->
+<section id="roles-section">
+  <div class="section-label">03 — Roles</div>
+  <h2 class="section-title fade-in">Available Roles</h2>
+  <p style="color:var(--muted);margin-bottom:2rem;font-weight:300;">Select a role for more information.</p>
+  <div class="roles-card fade-in">
+    <div class="roles-grid">
+      <a href="competitive.html" class="role r1">
+        <div class="role-icon">🏆</div>
+        <h3>Competitive</h3>
+        <small>High-level ranked play and tournament representation.</small>
+      </a>
+      <a href="freestyler.html" class="role r2">
+        <div class="role-icon">⚡</div>
+        <h3>Freestyler</h3>
+        <small>Aerial creativity, trick shots, and mechanical mastery.</small>
+      </a>
+      <a href="no-flipper.html" class="role r3">
+        <div class="role-icon">🧊</div>
+        <h3>No-Flipper</h3>
+        <small>Ground mechanics, dribbling, and no-flip style play.</small>
+      </a>
+      <a href="content-creator.html" class="role r4">
+        <div class="role-icon">🎥</div>
+        <h3>Content Creator</h3>
+        <small>Videos, clips, social media, and community engagement.</small>
+      </a>
+      <a href="vfx-gfx.html" class="role r5">
+        <div class="role-icon">🎨</div>
+        <h3>VFX / GFX</h3>
+        <small>Motion graphics, visual effects, and brand design.</small>
+      </a>
+    </div>
+  </div>
+</section>
+<div class="section-divider"></div>
+
+<!-- 04 JOIN -->
+<section id="join">
+  <div class="section-label">04 — Apply</div>
+  <h2 class="section-title fade-in">Join The Team</h2>
+  <div class="join-card fade-in">
+    <div class="join-layout">
+      <div class="join-left">
+        <h3>Ready to join <span>Kurai</span>?</h3>
+        <p>We're always looking for passionate players and creators to join our growing community. Fill out the form and we'll get back to you on Discord.</p>
+        <div class="join-requirements">
+          <div class="join-req-item">
+            <div class="join-req-icon">◈</div>
+            <div class="join-req-text">
+              <span class="join-req-title">Minimum Age</span>
+              <span class="join-req-desc">You must be at least 13 years old to apply.</span>
+            </div>
+          </div>
+          <div class="join-req-item">
+            <div class="join-req-icon">◈</div>
+            <div class="join-req-text">
+              <span class="join-req-title">Discord Required</span>
+              <span class="join-req-desc">Active Discord account required for communication.</span>
+            </div>
+          </div>
+          <div class="join-req-item">
+            <div class="join-req-icon">◈</div>
+            <div class="join-req-text">
+              <span class="join-req-title">Passion</span>
+              <span class="join-req-desc">A genuine love for Rocket League and competitive growth.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form class="join-form" id="joinForm">
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input type="text" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Discord User</label>
+          <input type="text" name="discord" placeholder="Discord Tag (ex: Kurai#1234)" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Age</label>
+          <input type="number" name="age" placeholder="Your age (minimum 13 years)" min="13" max="99" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Division</label>
+          <select name="division" required>
+            <option value="">Select Division</option>
+            <option value="competitive">Competitive</option>
+            <option value="cch">CCH (Comp Clip Hitter)</option>
+            <option value="vfx">VFX & GFX</option>
+            <option value="freestyler">Freestyler</option>
+            <option value="no-flipper">No-Flipper</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tell us more about yourself</label>
+          <textarea name="message" rows="5" placeholder="Why do you want to join Team Kurai?" required></textarea>
+        </div>
+        <button type="submit" id="submitBtn">Submit Application →</button>
+      </form>
+    </div>
+  </div>
+</section>
+<div class="section-divider"></div>
+
+<!-- 05 CONTACTS -->
+<section id="contacts">
+  <div class="section-label">05 — Connect</div>
+  <div class="follow-banner fade-in">
+    <div class="follow-banner-header">
+      <div class="follow-banner-bg-text">FOLLOW US</div>
+      <div class="follow-banner-label">
+        <h2>Follow Us</h2>
+      </div>
+    </div>
+    <div class="follow-cards-row">
+      <a href="https://www.twitch.tv/teamkurai" class="follow-card-new" target="_blank">
+        <img src="Twitch.png" alt="Twitch">
+        <div class="follow-card-info"><h3>Twitch</h3><span>@team_kurai</span></div>
+        <span class="follow-card-arrow">↗</span>
+      </a>
+      <a href="https://www.tiktok.com/@team_kurai" class="follow-card-new" target="_blank">
+        <img src="tiktok.jpg" alt="TikTok">
+        <div class="follow-card-info"><h3>TikTok</h3><span>@team_kurai</span></div>
+        <span class="follow-card-arrow">↗</span>
+      </a>
+      <a href="https://x.com/team_kurai" class="follow-card-new" target="_blank">
+        <img src="xuff.jpg" alt="X">
+        <div class="follow-card-info"><h3>Twitter / X</h3><span>@team_kurai</span></div>
+        <span class="follow-card-arrow">↗</span>
+      </a>
+      <a href="https://www.youtube.com/@TeamKuraiRL" class="follow-card-new" target="_blank">
+        <img src="ytt.png" alt="YouTube">
+        <div class="follow-card-info"><h3>YouTube</h3><span>@TeamKuraiRL</span></div>
+        <span class="follow-card-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© <span id="footerYear"></span> Team Kurai — All rights reserved.</p>
+  <div class="footer-right">Rocket League Community</div>
+</footer>
+
+<script>
+/* ════════════════════════════════════
+   LOADING SCREEN
+════════════════════════════════════ */
+(function() {
+  const loader = document.getElementById('loader');
+  const bar    = document.getElementById('loaderBar');
+  const txt    = document.getElementById('loaderText');
+
+  function skipLoader() {
+    loader.style.display = 'none';
+  }
+
+  const navEntry = performance.getEntriesByType('navigation')[0];
+  if (navEntry && navEntry.type === 'back_forward') { skipLoader(); return; }
+
+  const ref = document.referrer;
+  if (ref) {
+    try {
+      const refHost = new URL(ref).hostname;
+      if (refHost === location.hostname) { skipLoader(); return; }
+    } catch(e) {
+      if (ref.startsWith('file://')) { skipLoader(); return; }
+    }
+  }
+
+  if (sessionStorage.getItem('kurai_loaded')) { skipLoader(); return; }
+
+  const msgs = ['Loading...', 'Building roster...', 'Fueling up...', 'Almost there...'];
+  let pct = 0, mi = 0;
+  const iv = setInterval(() => {
+    pct += Math.random() * 18 + 6;
+    if (pct > 100) pct = 100;
+    bar.style.width = pct + '%';
+    txt.textContent = msgs[Math.min(mi++, msgs.length - 1)];
+    if (pct >= 100) {
+      clearInterval(iv);
+      sessionStorage.setItem('kurai_loaded', '1');
+      setTimeout(() => loader.classList.add('hidden'), 300);
+    }
+  }, 180);
+  window.addEventListener('load', () => {
+    pct = 100; bar.style.width = '100%';
+    sessionStorage.setItem('kurai_loaded', '1');
+    setTimeout(() => loader.classList.add('hidden'), 400);
+    clearInterval(iv);
+  });
+})();
+
+/* ════════════════════════════════════
+   TOAST SYSTEM
+════════════════════════════════════ */
+function showToast(message, type = 'info', duration = 4000) {
+  const container = document.getElementById('toastContainer');
+  const icons = { success: '✓', error: '✕', info: '◈' };
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + type;
+  toast.innerHTML = `<span class="toast-icon">${icons[type]}</span><span>${message}</span>`;
+  container.appendChild(toast);
+  requestAnimationFrame(() => { requestAnimationFrame(() => toast.classList.add('show')); });
+  const remove = () => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 400);
+  };
+  setTimeout(remove, duration);
+  toast.addEventListener('click', remove);
+}
+
+/* ════════════════════════════════════
+   CURSOR GLOW
+════════════════════════════════════ */
+const glow = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top  = e.clientY + 'px';
+});
+
+/* ════════════════════════════════════
+   NAV SCROLL + ACTIVE HIGHLIGHT
+════════════════════════════════════ */
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('nav-scrolled', scrollY > 30));
+
+const sections  = document.querySelectorAll('section[id]');
+const navLinks  = document.querySelectorAll('.nav-links a[data-section]');
+sections.forEach(s =>
+  new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting)
+        navLinks.forEach(l => l.classList.toggle('nav-active', l.dataset.section === e.target.id));
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' }).observe(s)
+);
+
+/* ════════════════════════════════════
+   HAMBURGER MENU
+════════════════════════════════════ */
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+document.querySelectorAll('.mobile-nav-link').forEach(l => l.addEventListener('click', () => {
+  hamburger.classList.remove('open');
+  mobileMenu.classList.remove('open');
+  document.body.style.overflow = '';
+}));
+
+/* ════════════════════════════════════
+   TYPEWRITER EYEBROW
+════════════════════════════════════ */
+(function() {
+  const el = document.getElementById('heroEyebrow');
+  const text = 'Rocket League Community';
+  let i = 0;
+  function type() {
+    if (i <= text.length) { el.textContent = text.slice(0, i++); setTimeout(type, 65); }
+  }
+  setTimeout(type, 900);
+})();
+
+/* ════════════════════════════════════
+   PARTICLE SYSTEM
+════════════════════════════════════ */
+(function() {
+  const canvas = document.getElementById('particles-canvas');
+  const ctx    = canvas.getContext('2d');
+  let W, H, particles = [];
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x   = Math.random() * W;
+      this.y   = Math.random() * H;
+      this.vx  = (Math.random() - 0.5) * 0.35;
+      this.vy  = -Math.random() * 0.5 - 0.15;
+      this.r   = Math.random() * 1.8 + 0.4;
+      this.a   = Math.random() * 0.5 + 0.1;
+      this.life = 0;
+      this.maxL = Math.random() * 200 + 100;
+    }
+    update() {
+      this.x += this.vx; this.y += this.vy; this.life++;
+      if (this.life > this.maxL || this.y < -10) this.reset();
+    }
+    draw() {
+      const progress = this.life / this.maxL;
+      const alpha    = this.a * Math.sin(progress * Math.PI);
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(168,85,247,${alpha})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+/* ════════════════════════════════════
+   COUNTDOWN
+════════════════════════════════════ */
+(function() {
+  const eventDate = new Date('2026-07-01T20:00:00');
+  const cdDays  = document.getElementById('cd-days');
+  const cdHours = document.getElementById('cd-hours');
+  const cdMins  = document.getElementById('cd-mins');
+  const cdSecs  = document.getElementById('cd-secs');
+  const wrap    = document.getElementById('heroCountdown');
+
+  function pad(n) { return String(n).padStart(2,'0'); }
+  function tick() {
+    const diff = eventDate - Date.now();
+    if (diff <= 0) { wrap.style.display = 'none'; return; }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000)  / 60000);
+    const s = Math.floor((diff % 60000)    / 1000);
+    cdDays.textContent  = pad(d);
+    cdHours.textContent = pad(h);
+    cdMins.textContent  = pad(m);
+    cdSecs.textContent  = pad(s);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
+/* ════════════════════════════════════
+   FADE-IN ON SCROLL
+════════════════════════════════════ */
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); fadeObs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+/* ════════════════════════════════════
+   COUNTER ANIMATION
+════════════════════════════════════ */
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  if (el.dataset.type === 'year') { el.textContent = target; return; }
+  const start = performance.now();
+  const dur   = 1200;
+  (function step(now) {
+    const t = Math.min((now - start) / dur, 1);
+    el.textContent = Math.floor((1 - Math.pow(1 - t, 3)) * target);
+    if (t < 1) requestAnimationFrame(step); else el.textContent = target;
+  })(start);
+}
+const counterObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target); counterObs.unobserve(e.target); } });
+}, { threshold: 0.5 });
+document.querySelectorAll('.stat-num[data-target]').forEach(el => counterObs.observe(el));
+
+/* ════════════════════════════════════
+   ROSTER FILTER
+════════════════════════════════════ */
+document.querySelectorAll('.roster-filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.roster-filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+
+    document.querySelectorAll('.roster-card').forEach(card => {
+      const role = card.dataset.role;
+      const show = filter === 'all' || role === filter;
+      card.style.display = show ? '' : 'none';
+    });
+
+    const sectionBreak = document.querySelector('.roster-section-break');
+    if (sectionBreak) {
+      sectionBreak.style.display = filter === 'all' ? '' : 'none';
+    }
+  });
+});
+
+/* ════════════════════════════════════
+   JOIN FORM — toast feedback
+════════════════════════════════════ */
+document.getElementById('joinForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  const formData = {
+    access_key: 'ead1fd3d-60db-4701-b4ca-d0d5809d8066',
+    subject: 'New Team Application - Team Kurai',
+    name:     this.name.value,
+    discord:  this.discord.value,
+    age:      this.age.value,
+    division: this.division.value,
+    message:  this.message.value
+  };
+
+  try {
+    const res  = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Application sent! We\'ll get back to you on Discord.', 'success', 5000);
+      this.reset();
+    } else {
+      showToast('Error: ' + data.message, 'error', 5000);
+    }
+  } catch {
+    showToast('Connection error. Please try again.', 'error', 5000);
+  }
+
+  btn.textContent = 'Submit Application →';
+  btn.disabled = false;
+});
+
+/* ════════════════════════════════════
+   BACKGROUND PARTICLES (full page)
+════════════════════════════════════ */
+(function(){
+  const c=document.getElementById('bg-particles'),ctx=c.getContext('2d');
+  let W,H,P=[];
+  function resize(){c.width=W=innerWidth;c.height=H=innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  function mk(){return{x:Math.random()*W,y:Math.random()*H+H,vx:(Math.random()-.5)*.4,vy:-Math.random()*.6-.2,r:Math.random()*1.6+.3,a:Math.random()*.45+.08,life:0,max:Math.random()*250+120};}
+  for(let i=0;i<120;i++){const p=mk();p.y=Math.random()*H;P.push(p);}
+  (function loop(){
+    ctx.clearRect(0,0,W,H);
+    P.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;p.life++;
+      if(p.life>p.max||p.y<-10){Object.assign(p,mk());p.life=0;}
+      const al=p.a*Math.sin(p.life/p.max*Math.PI);
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(168,85,247,'+al+')';ctx.fill();
+    });
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* ════════════════════════════════════
+   FOOTER YEAR
+════════════════════════════════════ */
+document.getElementById('footerYear').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
